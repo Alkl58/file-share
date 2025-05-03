@@ -11,25 +11,28 @@ class FileUpload extends Component
 {
     use WithFileUploads;
 
-    public $file;
+    public $files = [];
 
     public function submit()
     {
         $this->validate([
-            'file' => 'required|file|max:10240', // max 10MB
+            'files' => 'required|array|min:1|max:10',
+            'files.*' => 'file|max:10240',
         ]);
 
         $user = auth()->user();
 
-        $path = $this->file->store("uploads/{$user->id}", "public");
+        foreach ($this->files as $file) {
+            $path = $file->store("uploads/{$user->id}", "public");
 
-        File::create([
-            'user_id' => $user->id,
-            'filename' => $this->file->getClientOriginalName(),
-            'path' => $path,
-        ]);
+            File::create([
+                'user_id' => $user->id,
+                'filename' => $file->getClientOriginalName(),
+                'path' => $path,
+            ]);
+        }
 
-        $this->reset('file');
+        $this->reset('files');
         session()->flash('message', 'File uploaded successfully!');
     }
 

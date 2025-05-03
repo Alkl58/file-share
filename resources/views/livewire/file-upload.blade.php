@@ -1,6 +1,6 @@
 <div>
     <form wire:submit.prevent="submit" enctype="multipart/form-data">
-        <input type="file" wire:model="file">
+        <input type="file" wire:model="files" multiple>
         @error('file')
             <span class="error">{{ $message }}</span>
         @enderror
