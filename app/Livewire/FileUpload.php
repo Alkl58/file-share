@@ -29,6 +29,8 @@ class FileUpload extends Component
                 'user_id' => $user->id,
                 'filename' => $file->getClientOriginalName(),
                 'path' => $path,
+                'file_size' => $file->getSize(),
+                'mime_type' => $file->getMimeType(),
             ]);
         }
 

@@ -23,7 +23,13 @@
                         {{ $file->filename }}
                     </td>
                     <td class="px-4 py-3">
-                        0 Bytes
+                        @php
+                            $bytes = $file->file_size;
+                            $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+                            $power = $bytes > 0 ? floor(log($bytes, 1024)) : 0;
+                            $file_size = round($bytes / pow(1024, $power), 2) . ' ' . $units[$power];
+                        @endphp
+                        {{ $file_size }}
                     </td>
                     <td class="px-4 py-3">
                         {{ $file->created_at->format('Y-m-d H:i') }}

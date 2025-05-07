@@ -15,5 +15,7 @@ class File extends Model
         'user_id',
         'filename',
         'path',
+        'file_size',
+        'mime_type',
     ];
 }
