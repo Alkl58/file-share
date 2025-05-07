@@ -36,6 +36,14 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex justify-end space-x-2">
+                            @php
+                                $fileNameHash = \Illuminate\Support\Facades\Crypt::encryptString($file->filename);
+                                $filePathHash = \Illuminate\Support\Facades\Crypt::encryptString($file->path);
+                            @endphp
+                            <flux:button
+                                href="{{ route('download.file', ['filePathHash' => $filePathHash, 'fileNameHash' => $fileNameHash]) }}">
+                                Download</flux:button>
+
                             <flux:modal.trigger name="share-{{ $file->id }}">
                                 <flux:button>Share</flux:button>
                             </flux:modal.trigger>

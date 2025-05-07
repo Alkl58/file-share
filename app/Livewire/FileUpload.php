@@ -23,7 +23,7 @@ class FileUpload extends Component
         $user = auth()->user();
 
         foreach ($this->files as $file) {
-            $path = $file->store("uploads/{$user->id}", "public");
+            $path = $file->store("uploads/{$user->email}", "public");
 
             File::create([
                 'user_id' => $user->id,
