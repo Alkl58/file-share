@@ -2,16 +2,27 @@
 
 namespace App\Livewire;
 
+use App\Models\File;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\File;
-use Illuminate\Support\Facades\Storage;
+
+use Livewire\Attributes\On;
 
 class FileUpload extends Component
 {
     use WithFileUploads;
 
     public $files = [];
+
+
+    public $currentDirectoryId;
+
+    #[On('directoryChanged')]
+    public function updateDirectoryId($directoryId)
+    {
+        $this->currentDirectoryId = $directoryId;
+    }
 
     public function submit()
     {
@@ -31,6 +42,7 @@ class FileUpload extends Component
                 'path' => $path,
                 'file_size' => $file->getSize(),
                 'mime_type' => $file->getMimeType(),
+                'directory_id' => $this->currentDirectoryId,
             ]);
         }
 

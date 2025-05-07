@@ -13,9 +13,15 @@ class File extends Model
      */
     protected $fillable = [
         'user_id',
+        'directory_id',
         'filename',
         'path',
         'file_size',
         'mime_type',
     ];
+
+    public function directory()
+    {
+        return $this->belongsTo(Directory::class);
+    }
 }

@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('files', function (Blueprint $table) {
+        Schema::create('directories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('directory_id')->nullable()->constrained('directories')->onDelete('cascade');
-            $table->string('filename');
-            $table->string('path');
-            $table->string('mime_type');
-            $table->bigInteger('file_size'); //in bytes
+            $table->foreignId('parent_id')->nullable()->constrained('directories')->onDelete('cascade');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('files');
+        Schema::dropIfExists('directories');
     }
 };
