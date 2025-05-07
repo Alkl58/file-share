@@ -36,10 +36,13 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex justify-end space-x-2">
-                            <button class="hover:underline cursor-pointer">Share</button>
+                            <flux:modal.trigger name="share-{{ $file->id }}">
+                                <flux:button>Share</flux:button>
+                            </flux:modal.trigger>
                         </div>
                     </td>
                 </tr>
+                @include('partials.share-modal')
             @empty
                 <tr>
                     <td colspan="4" class="px-4 py-6 text-center text-zinc-500 dark:text-zinc-400">
