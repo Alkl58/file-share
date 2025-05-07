@@ -35,6 +35,7 @@ class FileUpload extends Component
         }
 
         $this->reset('files');
+        $this->dispatch('refresh-file-list');
         session()->flash('message', 'File uploaded successfully!');
     }
 
