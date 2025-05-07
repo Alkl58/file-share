@@ -32,7 +32,7 @@
                         {{ $file_size }}
                     </td>
                     <td class="px-4 py-3">
-                        {{ $file->created_at->format('Y-m-d H:i') }}
+                        {{ Carbon\Carbon::parse($file->created_at)->diffForHumans() }}
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex justify-end space-x-2">
