@@ -15,7 +15,6 @@ class FileUpload extends Component
 
     public $files = [];
 
-
     public $currentDirectoryId;
 
     #[On('directoryChanged')]
@@ -28,7 +27,7 @@ class FileUpload extends Component
     {
         $this->validate([
             'files' => 'required|array|min:1|max:10',
-            'files.*' => 'file|max:10240',
+            'files.*' => 'file|max:102400', // 102_400 = 100MB
         ]);
 
         $user = auth()->user();
