@@ -20,12 +20,16 @@
             <flux:spacer />
 
             <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                {{ __('Documentation') }}
+                <flux:navlist.item icon="chart-pie" href="#" target="_blank">
+                    <!-- Progress -->
+                    <div class="flex items-center gap-x-3 whitespace-nowrap">
+                        <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                            <div class="flex flex-col justify-center rounded-full overflow-hidden bg-zinc-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-zinc-500" style="width: 25%"></div>
+                        </div>
+                        <div class="w-10 text-end">
+                            <span class="text-sm text-gray-800 dark:text-white">25%</span>
+                        </div>
+                    </div>
                 </flux:navlist.item>
             </flux:navlist>
 
