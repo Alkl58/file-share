@@ -40,9 +40,14 @@
                     <td class="px-4 py-3"></td>
                     <td class="px-4 py-3"></td>
                     <td class="px-4 py-3 text-right">
-                        <!-- placeholder -->
+                        <div class="flex justify-end space-x-2">
+                            <flux:modal.trigger name="share-folder-{{ $directory->id }}">
+                                <flux:button size="xs">Share</flux:button>
+                            </flux:modal.trigger>
+                        </div>
                     </td>
                 </tr>
+                @livewire('share-folder-modal', ['folder_id' => $directory->id])
             @endforeach
             @forelse ($files as $file)
                 <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-950">

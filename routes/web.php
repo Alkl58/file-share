@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ShareController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\AdminController;
 use App\Livewire\Settings\Appearance;
@@ -28,7 +29,8 @@ Route::middleware(['auth'])->group(function () {
 
 //Download Route
 Route::get('/download/{filePathHash}/{fileNameHash}', [DownloadController::class, 'download'])->name('download.file');
-Route::get('/share/{uuid}', [DownloadController::class, 'downloadShare'])->name('share.index');
+Route::get('/share/{uuid}', [ShareController::class, 'index'])->name('share.index');
+Route::get('/share-download/{uuid}', [DownloadController::class, 'downloadShare'])->name('share.download');
 
 
 require __DIR__ . '/auth.php';
