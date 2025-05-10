@@ -28,5 +28,7 @@ Route::middleware(['auth'])->group(function () {
 
 //Download Route
 Route::get('/download/{filePathHash}/{fileNameHash}', [DownloadController::class, 'download'])->name('download.file');
+Route::get('/share/{uuid}', [DownloadController::class, 'downloadShare'])->name('share.index');
+
 
 require __DIR__ . '/auth.php';

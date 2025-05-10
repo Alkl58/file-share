@@ -86,7 +86,7 @@
                         </div>
                     </td>
                 </tr>
-                @include('partials.share-modal')
+                @livewire('share-modal', ['file_id' => $file->id])
             @empty
                 <tr>
                     <td colspan="4" class="px-4 py-6 text-center text-zinc-500 dark:text-zinc-400">

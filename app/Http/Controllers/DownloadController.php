@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
+use App\Models\Share;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Crypt;
@@ -43,6 +45,36 @@ class DownloadController extends Controller
             );
         } catch (DecryptException $e) {
         }
+
+        abort(404);
+    }
+
+    public function downloadShare(string $uuid)
+    {
+        $share = Share::where('code', $uuid)->firstOrFail();
+        $file = File::where('id', $share->file_id)->firstOrFail();
+        $filePath = $file->path;
+
+        if (! Storage::disk('public')->exists($file->path)) {
+            abort(404);
+        }
+
+        return response()->stream(
+            function () use ($filePath) {
+                $stream = Storage::disk('public')->readStream($filePath);
+                fpassthru($stream);
+                if (is_resource($stream)) {
+                    fclose($stream);
+                }
+            },
+            200,
+            [
+                'Content-Type' => Storage::disk('public')->mimeType($filePath),
+                'Content-Length' => Storage::disk('public')->size($filePath),
+                'Content-Disposition' => 'attachment; filename="' . $file->filename . '"',
+            ]
+        );
+
 
         abort(404);
     }
