@@ -12,6 +12,8 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Computed;
 
+use Illuminate\Support\Facades\Storage;
+
 class FileList extends Component
 {
     use WithPagination;
@@ -40,6 +42,23 @@ class FileList extends Component
 
         // Close Modal
         $this->modal('create-folder')->close();
+    }
+
+    public function deleteFile($fileId)
+    {
+        $file = File::where('id', $fileId)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        // Delete file
+        if (Storage::disk('public')->exists($file->path)) {
+            Storage::disk('public')->delete($file->path);
+        }
+
+        $file->delete();
+
+        $this->dispatch('refresh-file-list');
+        session()->flash('message', 'Datei erfolgreich gelöscht.');
     }
 
     #[Computed]
