@@ -44,6 +44,34 @@ class FileList extends Component
         $this->modal('create-folder')->close();
     }
 
+    public function deleteDirectory($directoryId)
+    {
+        $directory = Directory::where('id', $directoryId)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $this->deleteDirectoryRecursively($directory);
+
+        $this->dispatch('refresh-file-list');
+        session()->flash('message', 'Ordner und alle Inhalte wurden gelöscht.');
+    }
+
+    protected function deleteDirectoryRecursively(Directory $directory)
+    {
+        foreach ($directory->files as $file) {
+            if (Storage::disk('public')->exists($file->path)) {
+                Storage::disk('public')->delete($file->path);
+            }
+            $file->delete();
+        }
+
+        foreach ($directory->children as $child) {
+            $this->deleteDirectoryRecursively($child);
+        }
+
+        $directory->delete();
+    }
+
     public function deleteFile($fileId)
     {
         $file = File::where('id', $fileId)
