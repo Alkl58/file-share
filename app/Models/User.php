@@ -54,7 +54,20 @@ class User extends Authenticatable
     {
         return Str::of($this->name)
             ->explode(' ')
-            ->map(fn (string $name) => Str::of($name)->substr(0, 1))
+            ->map(fn(string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    public function getUserUsedSpace(): int
+    {
+        return File::where('user_id', $this->id)->sum('file_size');
+    }
+
+    public function getUserUsedSpacePercentage(): float
+    {
+        $usedBytes = File::where('user_id', $this->id)->sum('file_size');
+        $totalBytes = $this->space_limit; // user limit in bytes
+
+        return round(($usedBytes / $totalBytes) * 100, 2);
     }
 }

@@ -7,5 +7,9 @@
         @if (session()->has('message'))
             <div>{{ session('message') }}</div>
         @endif
+        @if ($spaceError)
+            <flux:callout variant="danger" icon="x-circle"
+                heading="You have run out of available space. Please try again with a smaller file." />
+        @endif
     </div>
 </div>

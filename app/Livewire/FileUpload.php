@@ -17,6 +17,8 @@ class FileUpload extends Component
 
     public $currentDirectoryId;
 
+    public $spaceError = false;
+
     #[On('directoryChanged')]
     public function updateDirectoryId($directoryId)
     {
@@ -34,6 +36,13 @@ class FileUpload extends Component
 
         foreach ($this->files as $file) {
             $path = $file->store("uploads/{$user->email}", "public");
+
+            $spaceAvailable = $user->space_limit - $user->getUserUsedSpace() - $file->getSize();
+
+            if ($spaceAvailable <= 0) {
+                $this->spaceError = true;
+                break;
+            }
 
             File::create([
                 'user_id' => $user->id,
