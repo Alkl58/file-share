@@ -26,8 +26,12 @@
             @foreach ($directories as $directory)
                 <tr wire:key="dir-{{ $directory->id }}"
                     class="hover:bg-gray-100 dark:hover:bg-zinc-950 bg-zinc-100/40 dark:bg-zinc-950/70">
+                    @php
+                        $fullPath = trim($path, '/') . '/' . $directory->name;
+                        $fullPath = '/' . trim($fullPath, '/');
+                    @endphp
                     <td class="px-4 py-3 flex items-center space-x-2 cursor-pointer"
-                        wire:click="goToDirectory({{ $directory->id }})">
+                        wire:click="goToDirectory('{{ $fullPath }}')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                             stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-folder">

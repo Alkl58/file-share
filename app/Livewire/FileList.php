@@ -18,15 +18,36 @@ class FileList extends Component
 {
     use WithPagination;
 
-    #[Url(history: true, as: 'd')]
-    public ?string $currentDirectoryId = null;
+    #[Url(history: true)]
+    public string $path = '/';
 
     public $newFolderName;
 
-    public function goToDirectory($id)
+    public function goToDirectory($fullPath)
     {
-        $this->currentDirectoryId = $id;
-        $this->dispatch('directoryChanged', $id);
+        // Normalize path
+        $fullPath = '/' . trim($fullPath, '/');
+
+        // Try to resolve directory by traversing the path
+        $segments = array_filter(explode('/', trim($fullPath, '/')));
+        $parent = null;
+
+        foreach ($segments as $segment) {
+            $parent = Directory::where('parent_id', optional($parent)->id)
+                ->where('name', $segment)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$parent) {
+                $this->path = '/';
+                $this->dispatch('directoryChanged', $this->currentDirectory?->id);
+                return;
+            }
+        }
+
+        // If we got here, the path is valid
+        $this->path = $fullPath;
+        $this->dispatch('directoryChanged', $this->currentDirectory?->id);
     }
 
     public function createDirectory()
@@ -34,7 +55,7 @@ class FileList extends Component
         Directory::create([
             'name' => $this->newFolderName,
             'user_id' => auth()->id(),
-            'parent_id' => $this->currentDirectoryId,
+            'parent_id' => $this->currentDirectory?->id,
         ]);
 
         // Reset variable
@@ -93,28 +114,64 @@ class FileList extends Component
     public function getBreadcrumbsProperty()
     {
         $breadcrumbs = [];
-        $directory = Directory::find($this->currentDirectoryId);
+        $segments = array_filter(explode('/', trim($this->path, '/')));
 
-        while ($directory) {
-            $breadcrumbs[] = $directory;
-            $directory = $directory->parent;
+        $parent = null;
+        foreach ($segments as $segment) {
+            $parent = Directory::where('parent_id', optional($parent)->id)
+                ->where('name', $segment)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if ($parent) {
+                $breadcrumbs[] = $parent;
+            } else {
+                break;
+            }
         }
 
-        return collect($breadcrumbs)->reverse();
+        return collect($breadcrumbs);
     }
+
+
+    #[Computed]
+    public function currentDirectory()
+    {
+        // Remove leading/trailing slashes
+        $segments = array_filter(explode('/', trim($this->path, '/')));
+
+        $parent = null;
+        foreach ($segments as $segment) {
+            $parent = Directory::where('parent_id', optional($parent)->id)
+                ->where('name', $segment)
+                ->where('user_id', auth()->id())
+                ->first();
+
+            if (!$parent) break;
+        }
+
+        return $parent;
+    }
+
 
     #[On('refresh-file-list')]
     public function render()
     {
-        $directories = Directory::where('parent_id', $this->currentDirectoryId)->get();
+        $directory = $this->currentDirectory;
+
+        if ($this->path !== '/' && !$directory) {
+            $this->redirect('/dashboard');
+        }
+
+        $directories = Directory::where('parent_id', optional($directory)->id)->get();
 
         $files = File::where('user_id', auth()->id())
-            ->when($this->currentDirectoryId !== '', fn($query) => $query->where('directory_id', $this->currentDirectoryId))
+            ->when($directory, fn($query) => $query->where('directory_id', $directory->id))
             ->latest()
             ->paginate(50);
 
         // File Upload Component needs to know our current directory
-        $this->dispatch('directoryChanged', $this->currentDirectoryId);
+        $this->dispatch('directoryChanged', $directory?->id);
 
         return view('livewire.file-list', compact('directories', 'files'));
     }
