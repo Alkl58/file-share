@@ -5,6 +5,10 @@
             @include('partials.create-folder-modal')
         </div>
     </div>
+
+    <!-- Delete Folder Modal -->
+    @include('partials.delete-folder-modal')
+
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -49,29 +53,15 @@
                                 <flux:button size="xs">Share</flux:button>
                             </flux:modal.trigger>
                             <div class="pl-2">
-                                <flux:modal.trigger name="delete-folder-{{ $directory->id }}">
-                                    <flux:button size="xs">Delete</flux:button>
+                                <flux:modal.trigger name="delete-folder">
+                                    <flux:button size="xs" wire:click="setFolderToDelete({{ $directory->id }})">
+                                        Delete</flux:button>
                                 </flux:modal.trigger>
                             </div>
                         </div>
                     </td>
                 </tr>
                 @livewire('share-folder-modal', ['folder_id' => $directory->id])
-                <flux:modal name="delete-folder-{{ $directory->id }}" class="md:w-96">
-                    <div class="space-y-6">
-                        <div>
-                            <flux:heading size="lg">Delete folder</flux:heading>
-                            <flux:text class="mt-2">This will delete all of it's contents!</flux:text>
-                        </div>
-
-                        <div class="flex">
-                            <flux:spacer />
-                            <flux:button size="xs" type="submit" variant="danger"
-                                wire:click="deleteDirectory({{ $directory->id }})">
-                                Delete</flux:button>
-                        </div>
-                    </div>
-                </flux:modal>
             @endforeach
             @forelse ($files as $file)
                 <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-950">
@@ -146,4 +136,7 @@
             @endforelse
         </tbody>
     </table>
+
+
+
 </div>

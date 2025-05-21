@@ -23,6 +23,21 @@ class FileList extends Component
 
     public $newFolderName;
 
+    public $folderToDelete;
+
+    public function setFolderToDelete($folderID)
+    {
+        // We have to cheat a little bit, as we can't place modals inside loops
+        // The values are set when clicking on the buttons of the action inside this function
+        // And that value is used by other functions when clicking on the button inside the modal
+        $this->folderToDelete = $folderID;
+    }
+
+    public function resetFolderToDelete()
+    {
+        $this->folderToDelete = null;
+    }
+
     public function goToDirectory($fullPath)
     {
         // Normalize path
@@ -65,15 +80,24 @@ class FileList extends Component
         $this->modal('create-folder')->close();
     }
 
-    public function deleteDirectory($directoryId)
+    public function deleteDirectory()
     {
-        $directory = Directory::where('id', $directoryId)
+        // Shouldn't happen
+        if (!$this->folderToDelete) {
+            return;
+        }
+
+        $directory = Directory::where('id', $this->folderToDelete)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
         $this->deleteDirectoryRecursively($directory);
 
         $this->dispatch('refresh-file-list');
+
+        // Reset variable
+        $this->folderToDelete = null;
+
         session()->flash('message', 'Ordner und alle Inhalte wurden gelöscht.');
     }
 
@@ -133,7 +157,6 @@ class FileList extends Component
         return collect($breadcrumbs);
     }
 
-
     #[Computed]
     public function currentDirectory()
     {
@@ -152,7 +175,6 @@ class FileList extends Component
 
         return $parent;
     }
-
 
     #[On('refresh-file-list')]
     public function render()
