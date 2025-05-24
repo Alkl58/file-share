@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ShareController;
 use App\Http\Controllers\DownloadController;
-use App\Http\Controllers\AdminController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
@@ -24,8 +23,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
-    Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
 });
+
+Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {
+    Route::get('admin', function () {
+        return view('admin');
+    })->name('admin.index');
+});
+
 
 //Download Route
 Route::get('/download/{filePathHash}/{fileNameHash}', [DownloadController::class, 'download'])->name('download.file');
