@@ -22,19 +22,25 @@
 
             <flux:spacer />
 
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="chart-pie">
-                    <!-- Progress -->
-                    <div class="flex items-center gap-x-3 whitespace-nowrap">
-                        <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700" role="progressbar" aria-valuenow="{{auth()->user()->getUserUsedSpacePercentage()}}" aria-valuemin="0" aria-valuemax="{{auth()->user()->space_limit}}">
-                            <div class="flex flex-col justify-center rounded-full overflow-hidden bg-zinc-600 text-xs text-white text-center whitespace-nowrap transition duration-500 dark:bg-zinc-500" style="width: {{auth()->user()->getUserUsedSpacePercentage()}}%"></div>
-                        </div>
-                        <div class="w-10 text-end">
-                            <span class="text-sm text-gray-800 dark:text-white">{{auth()->user()->getUserUsedSpacePercentage()}}%</span>
-                        </div>
-                    </div>
-                </flux:navlist.item>
-            </flux:navlist>
+            @if (auth()->user()->getUserUsedSpacePercentage() < 80)
+                <flux:navlist variant="outline">
+                    <flux:navlist.item icon="chart-pie">
+                        @include('partials.contingent-progress')
+                    </flux:navlist.item>
+                </flux:navlist>
+            @elseif (auth()->user()->getUserUsedSpacePercentage() < 90)
+                <flux:navlist variant="outline">
+                    <flux:navlist.item icon="exclamation-triangle" style="color:yellow;">
+                        @include('partials.contingent-progress')
+                    </flux:navlist.item>
+                </flux:navlist>
+            @else
+                <flux:navlist variant="outline">
+                    <flux:navlist.item icon="x-circle" style="color:red;">
+                        @include('partials.contingent-progress')
+                    </flux:navlist.item>
+                </flux:navlist>
+            @endif
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
