@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\File;
 use App\Models\Directory;
 
+use Illuminate\Support\Carbon;
+
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -123,12 +125,15 @@ class FileList extends Component
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
-        // Delete file
-        if (Storage::disk('public')->exists($file->path)) {
-            Storage::disk('public')->delete($file->path);
-        }
+        $file->deleted_at = Carbon::now();
+        $file->save();
 
-        $file->delete();
+        // Delete file
+        // if (Storage::disk('public')->exists($file->path)) {
+        //     Storage::disk('public')->delete($file->path);
+        // }
+
+        // $file->delete();
 
         $this->dispatch('refresh-file-list');
         session()->flash('message', 'Datei erfolgreich gelöscht.');
@@ -188,6 +193,7 @@ class FileList extends Component
         $directories = Directory::where('parent_id', optional($directory)->id)->get();
 
         $files = File::where('user_id', auth()->id())
+            ->whereNull('deleted_at')
             ->when($directory, fn($query) => $query->where('directory_id', $directory->id))
             ->latest()
             ->paginate(50);

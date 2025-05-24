@@ -5,6 +5,7 @@ use App\Http\Controllers\DownloadController;
 use App\Livewire\Settings\Appearance;
 use App\Livewire\Settings\Password;
 use App\Livewire\Settings\Profile;
+use App\Livewire\Trash;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/profile', Profile::class)->name('settings.profile');
     Route::get('settings/password', Password::class)->name('settings.password');
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
+    Route::get('trash', Trash::class)->name('trash');
 });
 
 Route::middleware(['auth', \App\Http\Middleware\IsAdmin::class])->group(function () {

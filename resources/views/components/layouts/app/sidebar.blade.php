@@ -22,6 +22,10 @@
 
             <flux:spacer />
 
+            <flux:navlist variant="outline">
+                <flux:navlist.item icon="trash" :href="route('trash')" :current="request()->routeIs('trash')" wire:navigate>{{ __('Trash') }}</flux:navlist.item>
+            </flux:navlist>
+
             @if (auth()->user()->getUserUsedSpacePercentage() < 80)
                 <flux:navlist variant="outline">
                     <flux:navlist.item icon="chart-pie">
