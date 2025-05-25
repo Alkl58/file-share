@@ -27,6 +27,8 @@ class FileList extends Component
 
     public $folderToDelete;
 
+    public $fileToDelete;
+
     public function setFolderToDelete($folderID)
     {
         // We have to cheat a little bit, as we can't place modals inside loops
@@ -38,6 +40,16 @@ class FileList extends Component
     public function resetFolderToDelete()
     {
         $this->folderToDelete = null;
+    }
+
+    public function setFileToDelete($fileID)
+    {
+        $this->fileToDelete = $fileID;
+    }
+
+    public function resetFileToDelete()
+    {
+        $this->fileToDelete = null;
     }
 
     public function goToDirectory($fullPath)
@@ -119,21 +131,22 @@ class FileList extends Component
         $directory->delete();
     }
 
-    public function deleteFile($fileId)
+    public function deleteFile()
     {
-        $file = File::where('id', $fileId)
+        // Shouldn't happen
+        if (! $this->fileToDelete) {
+            return;
+        }
+
+        $file = File::where('id', $this->fileToDelete)
             ->where('user_id', auth()->id())
             ->firstOrFail();
 
         $file->deleted_at = Carbon::now();
         $file->save();
 
-        // Delete file
-        // if (Storage::disk('public')->exists($file->path)) {
-        //     Storage::disk('public')->delete($file->path);
-        // }
-
-        // $file->delete();
+        $this->resetFolderToDelete();
+        $this->modal('delete-file')->close();
 
         $this->dispatch('refresh-file-list');
         session()->flash('message', 'Datei erfolgreich gelöscht.');

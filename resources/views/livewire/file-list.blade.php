@@ -9,6 +9,8 @@
     <!-- Delete Folder Modal -->
     @include('partials.delete-folder-modal')
 
+    @include('partials.delete-file-modal')
+
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -104,29 +106,15 @@
                             </flux:modal.trigger>
 
                             <div class="pl-2">
-                                <flux:modal.trigger name="delete-{{ $file->id }}">
-                                    <flux:button size="xs">Delete</flux:button>
+                                <flux:modal.trigger name="delete-file">
+                                    <flux:button size="xs" wire:click="setFileToDelete({{ $file->id }})">
+                                        Delete</flux:button>
                                 </flux:modal.trigger>
                             </div>
                         </div>
                     </td>
                 </tr>
                 @livewire('share-modal', ['file_id' => $file->id])
-                <flux:modal name="delete-{{ $file->id }}" class="md:w-96">
-                    <div class="space-y-6">
-                        <div>
-                            <flux:heading size="lg">Delete file</flux:heading>
-                            <flux:text class="mt-2">Are you sure to delete this file?</flux:text>
-                        </div>
-
-                        <div class="flex">
-                            <flux:spacer />
-                            <flux:button size="xs" type="submit" variant="danger"
-                                wire:click="deleteFile({{ $file->id }})">
-                                Delete</flux:button>
-                        </div>
-                    </div>
-                </flux:modal>
             @empty
                 <tr>
                     <td colspan="4" class="px-4 py-6 text-center text-zinc-500 dark:text-zinc-400">
@@ -136,7 +124,4 @@
             @endforelse
         </tbody>
     </table>
-
-
-
 </div>
