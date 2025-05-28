@@ -3,8 +3,8 @@
         wire:keydown.left.window="previousPage">
         <div class="flex items-center justify-center">
             <div class="relative overflow-x-auto rounded-lg w-[100%]">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-white">
-                    <thead class="text-xs text-white uppercase bg-gray-50 dark:bg-pink-700 dark:text-neutral-200 ">
+                <table class="w-full text-sm text-left rtl:text-right text-zinc-700 dark:text-zinc-300">
+                    <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">
                                 User
@@ -26,7 +26,7 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr wire:key="user-{{ $user->id }}"
-                                class="bg-neutral-950/50 border-t dark:bg-neutral-800 dark:border-pink-700">
+                                class="hover:bg-gray-100 dark:hover:bg-zinc-950 bg-zinc-100/40 dark:bg-zinc-950/70 dark:border-pink-700">
                                 <td class="px-6 py-4">
                                     {{ $user->name }}
                                 </td>
@@ -37,7 +37,6 @@
                                     {{ $user->created_at->format('Y-m-d') }}
                                 </td>
                                 <td class="px-6 py-4">
-
                                     <div class="flex items-center gap-x-3 whitespace-nowrap">
                                         <div class="flex w-full h-2 bg-gray-200 rounded-full overflow-hidden dark:bg-neutral-700"
                                             role="progressbar" aria-valuenow="{{ $user->getUserUsedSpacePercentage() }}"
@@ -50,7 +49,6 @@
                                                 class="text-sm text-gray-800 dark:text-white">{{ $user->getUserUsedSpacePercentage() }}%</span>
                                         </div>
                                     </div>
-
                                 </td>
                                 <td class="px-6 py-4">
                                     <flux:modal.trigger name="change-contingent">
