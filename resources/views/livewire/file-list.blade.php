@@ -93,12 +93,11 @@
                     </td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex justify-end space-x-2">
-                            @php
-                                $fileNameHash = \Illuminate\Support\Facades\Crypt::encryptString($file->filename);
-                                $filePathHash = \Illuminate\Support\Facades\Crypt::encryptString($file->path);
-                            @endphp
                             <flux:button size="xs"
-                                href="{{ route('download.file', ['filePathHash' => $filePathHash, 'fileNameHash' => $fileNameHash]) }}">
+                                href="{{ route('download.file', [
+                                    'filePathHash' => $file->getFilePathHash(),
+                                    'fileNameHash' => $file->getFileNameHash(),
+                                ]) }}">
                                 Download</flux:button>
 
                             <flux:modal.trigger name="share-{{ $file->id }}">

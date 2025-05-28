@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class File extends Model
 {
@@ -23,5 +24,15 @@ class File extends Model
     public function directory()
     {
         return $this->belongsTo(Directory::class);
+    }
+
+    public function getFilePathHash(): string
+    {
+        return Crypt::encryptString($this->path);
+    }
+
+    public function getFileNameHash(): string
+    {
+        return Crypt::encryptString($this->filename);
     }
 }
