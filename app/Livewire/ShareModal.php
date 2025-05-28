@@ -29,6 +29,7 @@ class ShareModal extends Component
         $uuid = (string) Str::uuid();
         Share::create([
             'file_id' => $this->file_id,
+            'user_id' => auth()->id(),
             'valid_until' => $this->valid_until,
             'code' => $uuid,
         ]);

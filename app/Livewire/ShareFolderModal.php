@@ -29,6 +29,7 @@ class ShareFolderModal extends Component
         $uuid = (string) Str::uuid();
         Share::create([
             'folder_id' => $this->folder_id,
+            'user_id' => auth()->id(),
             'valid_until' => $this->valid_until,
             'code' => $uuid,
         ]);

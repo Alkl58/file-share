@@ -1,6 +1,4 @@
 <div class="bg-white dark:bg-zinc-900 shadow-md rounded-lg overflow-hidden mt-8">
-
-
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -81,5 +79,4 @@
             </div>
         </div>
     </flux:modal>
-
 </div>

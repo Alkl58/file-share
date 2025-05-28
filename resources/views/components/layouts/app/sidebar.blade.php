@@ -14,6 +14,7 @@
             <flux:navlist variant="outline">
                 <flux:navlist.group :heading="__('Platform')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                    <flux:navlist.item icon="share" :href="route('shares')" :current="request()->routeIs('shares')" wire:navigate>{{ __('Shares') }}</flux:navlist.item>
                     @if(auth()->user()->admin) 
                     <flux:navlist.item icon="shield-check" :href="route('admin.index')" :current="request()->routeIs('admin.*')" wire:navigate> {{ __('Admin') }}</flux:navlist.item> 
                     @endif
