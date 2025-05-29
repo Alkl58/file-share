@@ -60,6 +60,7 @@ class FileList extends Component
         // The values are set when clicking on the buttons of the action inside this function
         // And that value is used by other functions when clicking on the button inside the modal
         $this->folderToDelete = $folderID;
+        $this->modal('delete-folder')->show();
     }
 
     public function resetFolderToDelete()
@@ -70,6 +71,7 @@ class FileList extends Component
     public function setFileToDelete($fileID)
     {
         $this->fileToDelete = $fileID;
+        $this->modal('delete-file')->show();
     }
 
     public function resetFileToDelete()
@@ -136,6 +138,7 @@ class FileList extends Component
 
         // Reset variable
         $this->folderToDelete = null;
+        $this->modal('delete-folder')->close();
 
         session()->flash('message', 'Ordner und alle Inhalte wurden gelöscht.');
     }

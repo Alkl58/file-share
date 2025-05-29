@@ -52,17 +52,23 @@
                     <td class="px-4 py-3"></td>
                     <td class="px-4 py-3"></td>
                     <td class="px-4 py-3 text-right">
-                        <div class="flex justify-end space-x-2">
-                            <flux:modal.trigger name="share-folder-{{ $directory->id }}">
-                                <flux:button size="xs">Share</flux:button>
-                            </flux:modal.trigger>
-                            <div class="pl-2">
-                                <flux:modal.trigger name="delete-folder">
-                                    <flux:button size="xs" wire:click="setFolderToDelete({{ $directory->id }})">
-                                        Delete</flux:button>
-                                </flux:modal.trigger>
-                            </div>
-                        </div>
+                        <flux:dropdown>
+                            <flux:button size="xs" icon:trailing="chevron-down">Options</flux:button>
+
+                            <flux:menu>
+
+                                <flux:menu.item icon="share">
+                                    Share (Placeholder)
+                                </flux:menu.item>
+
+                                <flux:menu.separator />
+
+                                <flux:menu.item variant="danger" icon="trash"
+                                    wire:click="setFolderToDelete({{ $directory->id }})">
+                                    Delete
+                                </flux:menu.item>
+                            </flux:menu>
+                        </flux:dropdown>
                     </td>
                 </tr>
                 @livewire('share-folder-modal', ['folder_id' => $directory->id])
@@ -148,25 +154,32 @@
                         {{ Carbon\Carbon::parse($file->created_at)->diffForHumans() }}
                     </td>
                     <td class="px-4 py-3 text-right">
-                        <div class="flex justify-end space-x-2">
-                            <flux:button size="xs"
-                                href="{{ route('download.file', [
-                                    'filePathHash' => $file->getFilePathHash(),
-                                    'fileNameHash' => $file->getFileNameHash(),
-                                ]) }}">
-                                Download</flux:button>
+                        <flux:dropdown>
+                            <flux:button size="xs" icon:trailing="chevron-down">Options</flux:button>
 
-                            <flux:modal.trigger name="share-{{ $file->id }}">
-                                <flux:button size="xs">Share</flux:button>
-                            </flux:modal.trigger>
+                            <flux:menu>
+                                <flux:menu.item icon="arrow-down-tray"
+                                    href="{{ route('download.file', [
+                                        'filePathHash' => $file->getFilePathHash(),
+                                        'fileNameHash' => $file->getFileNameHash(),
+                                    ]) }}">
+                                    Download
+                                </flux:menu.item>
 
-                            <div class="pl-2">
-                                <flux:modal.trigger name="delete-file">
-                                    <flux:button size="xs" wire:click="setFileToDelete({{ $file->id }})">
-                                        Delete</flux:button>
-                                </flux:modal.trigger>
-                            </div>
-                        </div>
+                                <flux:menu.separator />
+
+                                <flux:menu.item icon="share">
+                                    Share (Placeholder)
+                                </flux:menu.item>
+
+                                <flux:menu.separator />
+
+                                <flux:menu.item variant="danger" icon="trash"
+                                    wire:click="setFileToDelete({{ $file->id }})">
+                                    Delete
+                                </flux:menu.item>
+                            </flux:menu>
+                        </flux:dropdown>
                     </td>
                 </tr>
                 @livewire('share-modal', ['file_id' => $file->id])
