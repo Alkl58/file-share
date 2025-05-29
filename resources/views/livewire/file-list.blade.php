@@ -68,13 +68,65 @@
             @forelse ($files as $file)
                 <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-950">
                     <td class="px-4 py-3 flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                            stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                            <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
-                        </svg>
+
+                        @if ($file->mime_type == 'image/gif')
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-gif">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M8 8h-2a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2v-4h-1" />
+                                <path d="M12 8v8" />
+                                <path d="M16 12h3" />
+                                <path d="M20 8h-4v8" />
+                            </svg>
+                        @elseif (str_contains($file->mime_type, 'image'))
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-photo">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M15 8h.01" />
+                                <path
+                                    d="M3 6a3 3 0 0 1 3 -3h12a3 3 0 0 1 3 3v12a3 3 0 0 1 -3 3h-12a3 3 0 0 1 -3 -3v-12z" />
+                                <path d="M3 16l5 -5c.928 -.893 2.072 -.893 3 0l5 5" />
+                                <path d="M14 14l1 -1c.928 -.893 2.072 -.893 3 0l3 3" />
+                            </svg>
+                        @elseif (str_contains($file->mime_type, 'video'))
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-movie">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                                <path d="M8 4l0 16" />
+                                <path d="M16 4l0 16" />
+                                <path d="M4 8l4 0" />
+                                <path d="M4 16l4 0" />
+                                <path d="M4 12l16 0" />
+                                <path d="M16 8l4 0" />
+                                <path d="M16 16l4 0" />
+                            </svg>
+                        @elseif ($file->mime_type == 'application/pdf')
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-pdf">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
+                                <path d="M5 18h1.5a1.5 1.5 0 0 0 0 -3h-1.5v6" />
+                                <path d="M17 18h2" />
+                                <path d="M20 15h-3v6" />
+                                <path d="M11 15v6h1a2 2 0 0 0 2 -2v-2a2 2 0 0 0 -2 -2h-1z" />
+                            </svg>
+                        @else
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                            </svg>
+                        @endif
                         <span>
                             {{ $file->filename }}
                         </span>
