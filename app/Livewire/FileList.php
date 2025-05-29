@@ -29,6 +29,31 @@ class FileList extends Component
 
     public $fileToDelete;
 
+    public $previewLink;
+
+    public function previewFile($fileID)
+    {
+        $file = File::where('id', $fileID)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        if (!str_contains($file->mime_type, 'image')) {
+            return;
+        }
+
+        $this->previewLink = route('download.file', [
+            'filePathHash' => $file->getFilePathHash(),
+            'fileNameHash' => $file->getFileNameHash(),
+        ]);
+
+        $this->modal('preview-modal')->show();
+    }
+
+    public function resetPreviewFile()
+    {
+        $this->previewLink = null;
+    }
+
     public function setFolderToDelete($folderID)
     {
         // We have to cheat a little bit, as we can't place modals inside loops

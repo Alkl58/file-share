@@ -11,6 +11,8 @@
 
     @include('partials.delete-file-modal')
 
+    @include('partials.preview-modal')
+
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -128,7 +130,9 @@
                             </svg>
                         @endif
                         <span>
-                            {{ $file->filename }}
+                            <a wire:click.prevent="previewFile({{ $file->id }})">
+                                {{ $file->filename }}
+                            </a>
                         </span>
                     </td>
                     <td class="px-4 py-3">
