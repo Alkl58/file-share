@@ -13,6 +13,8 @@
 
     @include('partials.preview-modal')
 
+    @include('partials.share-file-modal')
+
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -174,8 +176,8 @@
 
                                 <flux:menu.separator />
 
-                                <flux:menu.item icon="share">
-                                    Share (Placeholder)
+                                <flux:menu.item icon="share" wire:click="openFileShareModal({{ $file->id }})">
+                                    Share
                                 </flux:menu.item>
 
                                 <flux:menu.separator />
@@ -188,7 +190,6 @@
                         </flux:dropdown>
                     </td>
                 </tr>
-                @livewire('share-modal', ['file_id' => $file->id])
             @empty
                 <tr>
                     <td colspan="4" class="px-4 py-6 text-center text-zinc-500 dark:text-zinc-400">

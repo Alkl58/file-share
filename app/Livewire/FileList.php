@@ -2,8 +2,9 @@
 
 namespace App\Livewire;
 
-use App\Models\File;
 use App\Models\Directory;
+use App\Models\File;
+use App\Models\Share;
 
 use Illuminate\Support\Carbon;
 
@@ -14,6 +15,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Url;
 use Livewire\Attributes\Computed;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 
 class FileList extends Component
@@ -30,6 +32,52 @@ class FileList extends Component
     public $fileToDelete;
 
     public $previewLink;
+
+    public $selectedID;
+
+    public $shareCode;
+
+    public ?Carbon $shareValidUntil;
+
+    public function openFileShareModal($fileID)
+    {
+        // Verify that the file belongs to user
+        $file = File::where('id', $fileID)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        // Temp save id
+        $this->resetShareModalAttributes();
+        $this->selectedID = $file->id;
+
+        // Open modal
+        $this->modal('file-share-modal')->show();
+    }
+
+    public function resetShareModalAttributes()
+    {
+        $this->selectedID = null;
+        $this->shareCode = null;
+        $this->shareValidUntil = null;
+    }
+
+    public function createFileShare()
+    {
+        $validated = $this->validate([
+            'shareValidUntil' => ['required', 'date', 'after_or_equal:tomorrow'],
+        ]);
+
+        $uuid = (string) Str::uuid();
+        Share::create([
+            'file_id' => $this->selectedID,
+            'user_id' => auth()->id(),
+            'valid_until' => $this->shareValidUntil,
+            'code' => $uuid,
+        ]);
+
+        $this->resetShareModalAttributes();
+        $this->shareCode = $uuid;
+    }
 
     public function previewFile($fileID)
     {
