@@ -15,6 +15,8 @@
 
     @include('partials.share-file-modal')
 
+    @include('partials.share-folder-modal')
+
     <table class="min-w-full text-sm text-left text-zinc-700 dark:text-zinc-300">
         <thead class="bg-zinc-100 dark:bg-zinc-950 text-xs uppercase text-zinc-400 dark:text-zinc-400">
             <tr>
@@ -59,8 +61,8 @@
 
                             <flux:menu>
 
-                                <flux:menu.item icon="share">
-                                    Share (Placeholder)
+                                <flux:menu.item icon="share" wire:click="openFolderShareModal({{ $directory->id }})">
+                                    Share
                                 </flux:menu.item>
 
                                 <flux:menu.separator />
@@ -73,7 +75,6 @@
                         </flux:dropdown>
                     </td>
                 </tr>
-                @livewire('share-folder-modal', ['folder_id' => $directory->id])
             @endforeach
             @forelse ($files as $file)
                 <tr class="border-b dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-950">

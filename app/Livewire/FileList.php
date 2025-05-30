@@ -54,6 +54,21 @@ class FileList extends Component
         $this->modal('file-share-modal')->show();
     }
 
+    public function openFolderShareModal($folderID)
+    {
+        // Verify that the folder belongs to user
+        $folder = Directory::where('id', $folderID)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        // Temp save id
+        $this->resetShareModalAttributes();
+        $this->selectedID = $folder->id;
+
+        // Open modal
+        $this->modal('folder-share-modal')->show();
+    }
+
     public function resetShareModalAttributes()
     {
         $this->selectedID = null;
@@ -70,6 +85,24 @@ class FileList extends Component
         $uuid = (string) Str::uuid();
         Share::create([
             'file_id' => $this->selectedID,
+            'user_id' => auth()->id(),
+            'valid_until' => $this->shareValidUntil,
+            'code' => $uuid,
+        ]);
+
+        $this->resetShareModalAttributes();
+        $this->shareCode = $uuid;
+    }
+
+    public function createFolderShare()
+    {
+        $validated = $this->validate([
+            'shareValidUntil' => ['required', 'date', 'after_or_equal:tomorrow'],
+        ]);
+
+        $uuid = (string) Str::uuid();
+        Share::create([
+            'directory_id' => $this->selectedID,
             'user_id' => auth()->id(),
             'valid_until' => $this->shareValidUntil,
             'code' => $uuid,
