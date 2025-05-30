@@ -136,9 +136,15 @@
                             </svg>
                         @endif
                         <span>
-                            <a wire:click.prevent="previewFile({{ $file->id }})">
-                                {{ $file->filename }}
-                            </a>
+                            @if (str_contains($file->mime_type, 'image'))
+                                <a wire:click.prevent="previewFile({{ $file->id }})" class="cursor-pointer">
+                                    {{ $file->filename }}
+                                </a>
+                            @else
+                                <span class="cursor-default">
+                                    {{ $file->filename }}
+                                </span>
+                            @endif
                         </span>
                     </td>
                     <td class="px-4 py-3">
