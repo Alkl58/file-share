@@ -254,6 +254,9 @@ class FileList extends Component
         $file->deleted_at = Carbon::now();
         $file->save();
 
+        // Remove shares
+        Share::where('file_id', $file->id)->delete();
+
         $this->resetFolderToDelete();
         $this->modal('delete-file')->close();
 
