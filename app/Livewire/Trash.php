@@ -20,6 +20,16 @@ class Trash extends Component
         $this->fileID = null;
     }
 
+    public function restoreFile($fileID)
+    {
+        $file = File::where('id', $fileID)
+            ->where('user_id', auth()->id())
+            ->firstOrFail();
+
+        $file->deleted_at = null;
+        $file->save();
+    }
+
     public function purgeFile()
     {
         $file = File::where('id', $this->fileID)

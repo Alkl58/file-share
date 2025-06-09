@@ -50,6 +50,9 @@
                                     <flux:button wire:click="setFile({{ $file->id }})" size="xs">Purge
                                     </flux:button>
                                 </flux:modal.trigger>
+                                <flux:button wire:click="restoreFile({{ $file->id }})" size="xs">
+                                    Restore
+                                </flux:button>
                             </div>
                         </div>
                     </td>
