@@ -320,6 +320,7 @@ class FileList extends Component
         $files = File::where('user_id', auth()->id())
             ->whereNull('deleted_at')
             ->when($directory, fn($query) => $query->where('directory_id', $directory->id))
+            ->when(!$directory,  fn($query) => $query->whereNull('directory_id'))
             ->latest()
             ->paginate(50);
 
